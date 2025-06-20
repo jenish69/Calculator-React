@@ -13,24 +13,32 @@ function Calculator() {
   const handleClick = (value) => {
     const operators = "+-*/.";
 
+    // Prevent multiple leading zeros like "00"
     if (input === "0" && value === "0") return;
 
-    if (input === "0" && operators.includes(value) && value !== "-") return;
-
+    // If input is "0"
     if (input === "0") {
       if (value === ".") {
         setInput("0.");
-      } else if (!operators.includes(value)) {
-        setInput(value);
-      } else {
+      } else if (operators.includes(value)) {
         setInput("0" + value);
+      } else {
+        setInput(value);
       }
       return;
-    };
+    }
 
     const lastChar = input.slice(-1);
-    
-    if (operators.includes(lastChar) && operators.includes(value)) {
+
+    // Prevent multiple dots in a number segment
+    if (value === ".") {
+      const parts = input.split(/[\+\-\*\/]/);
+      const lastPart = parts[parts.length - 1];
+      if (lastPart.includes(".")) return;
+    }
+
+    // Replace last operator with the new one if two in a row
+    if (operators.includes(lastChar) && operators.includes(value) && value !== ".") {
       setInput((prev) => prev.slice(0, -1) + value);
     } else {
       setInput((prev) => prev + value);
