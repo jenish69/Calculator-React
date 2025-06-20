@@ -63,13 +63,16 @@ function Calculator() {
     const { key } = e;
     
     if ("0123456789+-*/.".includes(key)) {
+      e.preventDefault();
       handleClick(key);
     } else if (key === "Enter") {
       e.preventDefault();
       handleEqual();
     } else if (key === "Backspace") {
+      e.preventDefault();
       handleBackspace();
     } else if (key === "Escape") {
+      e.preventDefault();
       handleClear();
     }
   };
@@ -77,7 +80,7 @@ function Calculator() {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [input]);
 
   const buttons = [
     "7", "8", "9", "/",
@@ -89,7 +92,7 @@ function Calculator() {
   return (
     <div className="wrapper">
       <div className="calculator">
-        <input className="input" type="text" value={input} readOnly />
+        <input className="input" type="text" value={input} onFocus={(e) => e.target.blur()} readOnly />
         <div className="buttons">
           {buttons.map((btn, i) => (
             <button
